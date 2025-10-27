@@ -27,7 +27,7 @@ async function signup(e) {
   }
 
   alert('Signup successful! Check your email to confirm.');
-  location.href = 'todo.html';
+  location.href = 'login.html';
 }
 
 registerForm?.addEventListener('submit', signup);
