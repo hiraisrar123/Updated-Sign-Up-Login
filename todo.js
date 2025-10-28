@@ -16,7 +16,7 @@ userFetch();
 
 // insert
 
- let title = document.getElementById('tittle');
+ let tittle = document.getElementById('tittle');
  let description = document.getElementById('description');
  let priority = document.getElementsByName('priority');
  let addTodo = document.getElementById('addTodo');
@@ -26,7 +26,7 @@ userFetch();
 async function _addTodo() {
   let selectedPriority;
 
-  console.log("Email:", title.value);
+  console.log("Email:", tittle.value);
   console.log("Description:", description.value);
 
   for (let p of priority) {
@@ -35,17 +35,17 @@ async function _addTodo() {
     }
   }
 
-  if (!title.value || !description.value) {
+  if (!tittle.value || !description.value) {
     alert('Please fill this form');
     return;
   }
 
   try {
-    const { error } = await supabase.from('Todos').insert({ 
-      title: title.value,
-      priority: selectedPriority,
-      description: description.value
-    });
+  const { error } = await supabase.from('Todos').insert({
+  tittle: tittle.value,
+  priority: selectedPriority,
+  description: description.value
+});
 
     if (error) {
       alert('Error in creating: ' + error.message);
@@ -63,15 +63,42 @@ addTodo.addEventListener('click', _addTodo);
 
 //  _________________________Fetch Data from Database
 
-async function showAllTodo(){
+async function AllTodos(){
   try{
-const { data, error } = await supabase.from('Todos').select().eq('primary', 'Hi')
-console.log(data);
-
-
-  } catch (err){
-    console.log(err);
-    
-  }
+const { data, error } = await supabase.from('Todos').select('*')
+if(data){
+  return showAllTodos (data)
 }
-showAllTodo();
+  } catch (err){
+    console.log(err); 
+  }
+  if (error) {
+  alert('Error in creating: ' + error.message);
+} else {
+  alert('Done ✅');
+  AllTodos(); // 👈 ye line add karo
+}
+
+  AllTodos();
+}
+
+
+async function showAllTodos(todos) {
+  main.innerHTML += `
+  <div class="card m-2" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">${todos.tittle}</h5>
+      <p class="card-text">${todos.description}</p>
+      <a href="#" class="card-link">${todos.priority}</a>
+      <button class="btn btn-success mt-3">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+      <br>
+      <button class="btn btn-danger mt-3">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>`;
+
+  
+}
